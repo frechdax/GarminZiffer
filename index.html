@@ -3,39 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#09070D">
-<title>Garmin Ziffer</title>
+<meta name="theme-color" content="#09070A">
+<title>Fleur · Garmin Ziffernblatt</title>
 <style>
-:root{color-scheme:dark;font-family:Inter,system-ui,-apple-system,sans-serif;background:#09070D;color:#fff4f7}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 0,#43283f 0,transparent 48%),#09070D}
-main{width:min(760px,calc(100% - 28px));margin:auto;padding:56px 0}
-.badge{display:inline-block;padding:7px 11px;border:1px solid #7b526e;border-radius:999px;color:#f2a9be;font-size:12px}
-h1{font-size:clamp(42px,9vw,72px);letter-spacing:-.055em;line-height:.95;margin:18px 0}
-p{color:#c7afc0;line-height:1.6}
-.card{margin-top:28px;background:#201522;border:1px solid #51364c;border-radius:22px;padding:22px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
-.item{background:#130d15;border:1px solid #3b2938;border-radius:14px;padding:14px}
-.item strong{display:block;color:#b8a7f7;margin-bottom:5px}
-small{color:#806b7b}
-a{color:#f2a9be}
-@media(max-width:620px){.grid{grid-template-columns:1fr}}
+:root{color-scheme:dark;font-family:Inter,system-ui,-apple-system,sans-serif;background:#09070a;color:#f8e9e1}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 0,#4b2738 0,transparent 42%),#09070a}
+main{width:min(860px,calc(100% - 28px));margin:auto;padding:48px 0 72px}.badge{display:inline-block;padding:7px 11px;border:1px solid #7c5369;border-radius:999px;color:#f3a7b8;font-size:12px}
+h1{font-size:clamp(48px,10vw,88px);letter-spacing:-.06em;line-height:.9;margin:18px 0 16px}p{color:#ccb8c4;line-height:1.65}.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:26px;align-items:center}.preview{width:100%;max-width:390px;justify-self:center;border-radius:50%;box-shadow:0 25px 90px #0008}
+.card{margin-top:28px;background:#171017;border:1px solid #4c3344;border-radius:24px;padding:22px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}.item{background:#0f0b10;border:1px solid #34252f;border-radius:15px;padding:15px}.item strong{display:block;color:#e0b277;margin-bottom:6px}.item small{color:#bca7b3}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.btn{display:inline-block;padding:11px 15px;border-radius:12px;background:#f3a7b8;color:#1b1017;text-decoration:none;font-weight:700}.btn.alt{background:#2c2029;color:#f8e9e1;border:1px solid #604256}a{color:#f3a7b8}@media(max-width:700px){.hero{grid-template-columns:1fr}.preview{max-width:310px}.grid{grid-template-columns:1fr}}
 </style>
 </head>
-<body>
-<main>
-<span class="badge">GARMIN CONNECT IQ</span>
-<h1>Garmin<br>Ziffer</h1>
-<p>Ein feminines, modernes Garmin-Watchface in Plum, Rosé und Lavendel. Das eigentliche Zifferblatt wird als Connect-IQ-App für kompatible Garmin-Uhren gebaut.</p>
-<section class="card">
-<h2>Aktueller Prototyp</h2>
-<div class="grid">
-<div class="item"><strong>Venu 3</strong><small>454 × 454 AMOLED</small></div>
-<div class="item"><strong>Venu 3S</strong><small>390 × 390 AMOLED</small></div>
-<div class="item"><strong>vívoactive 5</strong><small>390 × 390 AMOLED</small></div>
-<div class="item"><strong>Daten</strong><small>Uhrzeit · Datum · Schritte · Akku</small></div>
-</div>
-<p>Der Quellcode liegt im <a href="https://github.com/frechdax/GarminZiffer">GitHub-Repository</a>. Eine installierbare Garmin-Datei wird als Release ergänzt, sobald der Connect-IQ-Build signiert wurde.</p>
-</section>
-</main>
-</body>
-</html>
+<body><main>
+<section class="hero"><div><span class="badge">GARMIN CONNECT IQ · PROTOTYPE</span><h1>Fleur</h1><p>Ein feminines Garmin-Ziffernblatt mit Rosé, Gold und Flieder. Uhrzeit, Datum, Schritte, Puls, Akku und – wenn verfügbar – Body Battery in einem floralen AMOLED-Layout.</p><div class="actions"><a class="btn" href="downloads/GarminZiffer-venu3.prg">Venu 3 laden</a><a class="btn alt" href="downloads/GarminZiffer-venu3s.prg">Venu 3S</a><a class="btn alt" href="downloads/GarminZiffer-vivoactive5.prg">vívoactive 5</a></div></div><img class="preview" src="docs/fleur-display-preview.png" alt="Fleur Garmin Watchface Vorschau"></section>
+<section class="card"><h2>Im aktuellen Build</h2><div class="grid"><div class="item"><strong>Live-Daten</strong><small>Schritte · Puls · Akku · Body Battery</small></div><div class="item"><strong>AMOLED</strong><small>Reduzierter Always-on-Modus</small></div><div class="item"><strong>Responsive</strong><small>Für runde Displays skaliert</small></div><div class="item"><strong>Cloud Build</strong><small>Keine lokale Entwicklungsumgebung nötig</small></div></div><p>Quellcode, Build-Workflow und Installationshinweise liegen im <a href="https://github.com/frechdax/GarminZiffer">GitHub-Repository</a>.</p></section>
+</main></body></html>
