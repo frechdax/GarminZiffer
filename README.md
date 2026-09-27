@@ -52,3 +52,10 @@ Siehe `docs/INSTALL.md`.
 ## Design-Richtung
 
 Der erste Stand ist bewusst elegant und feminin statt verspielt: dunkles Zifferblatt, roséfarbener Außenring, Lavendel-Details und klare Typografie. Die nächste Ausbaustufe kann konfigurierbare Farbschemata, Komplikationen, Herzfrequenz, Wetter und weitere Garmin-Daten enthalten.
+
+
+## Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ffrechdax%2FGarminZiffer&project-name=garmin-ziffer)
+
+Nach dem einmaligen Import ist das Repository per Git Integration mit Vercel verbunden: Pushes auf `main` erzeugen Production Deployments, andere Branches Preview Deployments.
