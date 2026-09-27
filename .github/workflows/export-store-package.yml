@@ -37,7 +37,7 @@ jobs:
           else
             echo "No persistent key configured; generating a temporary export key."
             openssl genrsa -out developer_key.pem 4096
-            openssl pkcs8 -topk8 -inform PEM -outform DER               -in developer_key.pem -out developer_key.der -nocrypt
+            openssl pkcs8 -topk8 -inform PEM -outform DER -in developer_key.pem -out developer_key.der -nocrypt
             rm developer_key.pem
           fi
           chmod 600 developer_key.der
@@ -47,7 +47,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          docker run --rm             -v "$PWD:/workspace"             -w /workspace             ghcr.io/blackshadev/garmin-connectiq-tools:9.2.0             java -jar /connectiq/bin/monkeybrains.jar               -e -r -w               -o /workspace/dist/Blush-Dial.iq               -f /workspace/monkey.jungle               -y /workspace/developer_key.der
+          docker run --rm -v "$PWD:/workspace" -w /workspace ghcr.io/blackshadev/garmin-connectiq-tools:9.2.0 -c 'java -jar /connectiq/bin/monkeybrains.jar -e -r -w -o /workspace/dist/Blush-Dial.iq -f /workspace/monkey.jungle -y /workspace/developer_key.der'
 
       - name: Upload Connect IQ Store package
         uses: actions/upload-artifact@v4
