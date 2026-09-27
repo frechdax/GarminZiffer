@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#09070D">
+<title>Garmin Ziffer</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,system-ui,-apple-system,sans-serif;background:#09070D;color:#fff4f7}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 0,#43283f 0,transparent 48%),#09070D}
+main{width:min(760px,calc(100% - 28px));margin:auto;padding:56px 0}
+.badge{display:inline-block;padding:7px 11px;border:1px solid #7b526e;border-radius:999px;color:#f2a9be;font-size:12px}
+h1{font-size:clamp(42px,9vw,72px);letter-spacing:-.055em;line-height:.95;margin:18px 0}
+p{color:#c7afc0;line-height:1.6}
+.card{margin-top:28px;background:#201522;border:1px solid #51364c;border-radius:22px;padding:22px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
+.item{background:#130d15;border:1px solid #3b2938;border-radius:14px;padding:14px}
+.item strong{display:block;color:#b8a7f7;margin-bottom:5px}
+small{color:#806b7b}
+a{color:#f2a9be}
+@media(max-width:620px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<span class="badge">GARMIN CONNECT IQ</span>
+<h1>Garmin<br>Ziffer</h1>
+<p>Ein feminines, modernes Garmin-Watchface in Plum, Rosé und Lavendel. Das eigentliche Zifferblatt wird als Connect-IQ-App für kompatible Garmin-Uhren gebaut.</p>
+<section class="card">
+<h2>Aktueller Prototyp</h2>
+<div class="grid">
+<div class="item"><strong>Venu 3</strong><small>454 × 454 AMOLED</small></div>
+<div class="item"><strong>Venu 3S</strong><small>390 × 390 AMOLED</small></div>
+<div class="item"><strong>vívoactive 5</strong><small>390 × 390 AMOLED</small></div>
+<div class="item"><strong>Daten</strong><small>Uhrzeit · Datum · Schritte · Akku</small></div>
+</div>
+<p>Der Quellcode liegt im <a href="https://github.com/frechdax/GarminZiffer">GitHub-Repository</a>. Eine installierbare Garmin-Datei wird als Release ergänzt, sobald der Connect-IQ-Build signiert wurde.</p>
+</section>
+</main>
+</body>
+</html>
