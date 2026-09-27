@@ -69,7 +69,7 @@ class GarminZifferView extends WatchUi.WatchFace {
         drawMoon(dc, cx, scale);
         drawFlorals(dc, w, scale);
 
-        var now = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
+        var now = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
         var dateText = now.day.format("%02d") + "." + now.month.format("%02d") + ".";
         dc.setColor(COLOR_TEXT, Graphics.COLOR_TRANSPARENT);
         dc.drawText(cx, (112 * scale).toNumber(), Graphics.FONT_SMALL, dateText, Graphics.TEXT_JUSTIFY_CENTER);
