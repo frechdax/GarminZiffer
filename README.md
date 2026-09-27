@@ -1,26 +1,49 @@
-# GarminZiffer
+# Garmin Ziffernblatt — Fleur
 
-Ein eigenständiges Garmin-Connect-IQ-Watchface in Monkey C mit femininem, modernem AMOLED-Design.
+Eigenständiges Garmin-Connect-IQ-Watchface für runde AMOLED-Garmin-Uhren. **Fleur** ist ein femininer Prototyp mit Rosé-, Gold- und Flieder-Akzenten und wird vollständig in Monkey C gezeichnet.
 
-## Aktueller Prototyp
+![Fleur Vorschau](docs/fleur-display-preview.png)
 
-- dunkler Plum-Hintergrund
-- Blush-/Lavendel-Akzente
-- große digitale Uhrzeit
+## Funktionen
+
+- große digitale Uhrzeit mit 12-/24-Stunden-Modus nach Geräteeinstellung
 - Datum
-- Schritte
-- Akkustand
-- 12-/24-Stunden-Modus nach Geräteeinstellung
-- reduzierter Always-on-/Low-Power-Modus
-- direkte Skalierung über die Displaygröße
+- Schritte und Fortschritt zum Tagesziel
+- letzter verfügbarer Herzfrequenzwert
+- Garmin-Akkustand
+- Body Battery, sofern das Gerät den Wert über Connect IQ `SensorHistory` bereitstellt
+- florale Rosé-/Gold-/Flieder-Elemente
+- stromsparender Always-on-/Low-Power-Modus
+- prozedural gezeichnetes Layout ohne großes Hintergrundbild im Watchface-Speicher
 
-## Unterstützte Geräte (v1)
+## Aktuell gebaute Geräte
 
-- Garmin Venu 3 (`venu3`, 454×454)
-- Garmin Venu 3S (`venu3s`, 390×390)
-- Garmin vívoactive 5 (`vivoactive5`, 390×390)
+- Garmin Venu 3 (`venu3`)
+- Garmin Venu 3S (`venu3s`)
+- Garmin vívoactive 5 (`vivoactive5`)
 
-Weitere Geräte können in `manifest.xml` ergänzt werden. Der aktuelle Code zeichnet relativ zur Displaygröße und ist deshalb bereits auf zusätzliche runde Geräte vorbereitet.
+Weitere runde Connect-IQ-Geräte können nach Geräteprüfung ergänzt werden.
+
+## Automatische Builds
+
+Bei Änderungen auf `main` bauen GitHub Actions automatisch `.prg`-Dateien. Zusätzlich werden aktuelle Sideload-Builds im Ordner [`downloads/`](downloads/) abgelegt.
+
+Direktlinks nach erfolgreichem Build:
+
+- [Venu 3](downloads/GarminZiffer-venu3.prg)
+- [Venu 3S](downloads/GarminZiffer-venu3s.prg)
+- [vívoactive 5](downloads/GarminZiffer-vivoactive5.prg)
+
+Für einen dauerhaften Store-Release sollte `GARMIN_DEVELOPER_KEY_B64` als Repository Secret mit einem dauerhaft aufbewahrten Garmin Developer Key gesetzt werden.
+
+## Installation auf der Uhr
+
+1. Passende `.prg` aus `downloads/` herunterladen.
+2. Garmin per USB verbinden.
+3. Datei nach `GARMIN/APPS` kopieren.
+4. Uhr trennen und **Fleur** in der Ziffernblatt-Auswahl auswählen.
+
+Siehe auch [`docs/INSTALL.md`](docs/INSTALL.md).
 
 ## Projektstruktur
 
@@ -32,30 +55,14 @@ GarminZiffer/
 │   ├── GarminZifferApp.mc
 │   └── GarminZifferView.mc
 ├── resources/
-│   ├── drawables/
-│   │   ├── drawables.xml
-│   │   └── launcher_icon.png
-│   └── strings/strings.xml
-├── resources-deu/strings/strings.xml
-├── resources-eng/strings/strings.xml
-└── docs/INSTALL.md
+├── resources-deu/
+├── resources-eng/
+├── docs/
+├── downloads/
+├── store/
+└── .github/workflows/
 ```
 
-## Build
+## Status
 
-Das Projekt ist für Garmin Connect IQ vorbereitet. Zum Build wird ein Garmin-Developer-Key benötigt.
-
-Mit installiertem Connect IQ SDK lässt sich das Projekt über die Garmin Monkey-C-Erweiterung für VS Code oder `monkeyc` bauen.
-
-Siehe `docs/INSTALL.md`.
-
-## Design-Richtung
-
-Der erste Stand ist bewusst elegant und feminin statt verspielt: dunkles Zifferblatt, roséfarbener Außenring, Lavendel-Details und klare Typografie. Die nächste Ausbaustufe kann konfigurierbare Farbschemata, Komplikationen, Herzfrequenz, Wetter und weitere Garmin-Daten enthalten.
-
-
-## Vercel
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ffrechdax%2FGarminZiffer&project-name=garmin-ziffer)
-
-Nach dem einmaligen Import ist das Repository per Git Integration mit Vercel verbunden: Pushes auf `main` erzeugen Production Deployments, andere Branches Preview Deployments.
+**Prototype v0.2.** Nächste sinnvolle Schritte sind zusätzliche Garmin-Modelle, konfigurierbare Farben/Datenfelder und eine stabil signierte Connect-IQ-Store-Version.
