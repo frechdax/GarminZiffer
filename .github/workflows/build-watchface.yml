@@ -1,0 +1,61 @@
+name: Build Garmin Watch Face
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build ${{ matrix.device }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        device:
+          - venu3
+          - venu3s
+          - vivoactive5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare Garmin developer key
+        shell: bash
+        env:
+          GARMIN_DEVELOPER_KEY_B64: ${{ secrets.GARMIN_DEVELOPER_KEY_B64 }}
+        run: |
+          set -euo pipefail
+          if [ -n "${GARMIN_DEVELOPER_KEY_B64:-}" ]; then
+            echo "$GARMIN_DEVELOPER_KEY_B64" | base64 --decode > developer_key.der
+            echo "Using persistent developer key from repository secret."
+          else
+            echo "No persistent key configured; generating a temporary sideload key for this run."
+            openssl genrsa -out developer_key.pem 4096
+            openssl pkcs8 -topk8 -inform PEM -outform DER               -in developer_key.pem -out developer_key.der -nocrypt
+            rm developer_key.pem
+          fi
+          chmod 600 developer_key.der
+          mkdir -p out
+
+      - name: Build watch face
+        uses: blackshadev/garmin-connectiq-build-action@9.2.0
+        with:
+          projectJungle: ./monkey.jungle
+          developerKey: ./developer_key.der
+          outputPath: out/GarminZiffer-${{ matrix.device }}.prg
+          device: ${{ matrix.device }}
+          typeCheck: '1'
+          extraArgs: '-w'
+
+      - name: Upload PRG
+        uses: actions/upload-artifact@v4
+        with:
+          name: GarminZiffer-${{ matrix.device }}
+          path: out/GarminZiffer-${{ matrix.device }}.prg
+          if-no-files-found: error
+          retention-days: 30
