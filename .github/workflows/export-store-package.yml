@@ -1,0 +1,58 @@
+name: Export Connect IQ Store Package
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'manifest.xml'
+      - 'monkey.jungle'
+      - 'source/**'
+      - 'resources/**'
+      - 'resources-deu/**'
+      - 'resources-eng/**'
+      - '.github/workflows/export-store-package.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    name: Export Blush Dial .iq
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare Garmin developer key
+        shell: bash
+        env:
+          GARMIN_DEVELOPER_KEY_B64: ${{ secrets.GARMIN_DEVELOPER_KEY_B64 }}
+        run: |
+          set -euo pipefail
+          if [ -n "${GARMIN_DEVELOPER_KEY_B64:-}" ]; then
+            echo "$GARMIN_DEVELOPER_KEY_B64" | base64 --decode > developer_key.der
+            echo "Using persistent developer key."
+          else
+            echo "No persistent key configured; generating a temporary export key."
+            openssl genrsa -out developer_key.pem 4096
+            openssl pkcs8 -topk8 -inform PEM -outform DER               -in developer_key.pem -out developer_key.der -nocrypt
+            rm developer_key.pem
+          fi
+          chmod 600 developer_key.der
+          mkdir -p dist
+
+      - name: Export multi-device IQ package
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm             -v "$PWD:/workspace"             -w /workspace             ghcr.io/blackshadev/garmin-connectiq-tools:9.2.0             java -jar /connectiq/bin/monkeybrains.jar               -e -r -w               -o /workspace/dist/Blush-Dial.iq               -f /workspace/monkey.jungle               -y /workspace/developer_key.der
+
+      - name: Upload Connect IQ Store package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Blush-Dial-Connect-IQ-Store
+          path: dist/Blush-Dial.iq
+          if-no-files-found: error
+          retention-days: 90
