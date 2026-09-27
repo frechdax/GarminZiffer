@@ -1,25 +1,23 @@
-# Installation / Test auf einer Garmin-Uhr
+# Fleur installieren
 
-## 1. Connect IQ Build erzeugen
+## Ohne lokale Entwicklungsumgebung
 
-Für ein Garmin-Watchface muss der Monkey-C-Quellcode mit dem Garmin Connect IQ SDK kompiliert und signiert werden. Ein Developer Key ist dafür erforderlich.
+Das Repository baut die Garmin-Dateien automatisch in GitHub Actions. Du brauchst auf deinem Mac weder VS Code noch das Garmin Connect IQ SDK.
 
-Garmins üblicher Weg:
+1. Öffne im Repository den Ordner `downloads/`.
+2. Lade die `.prg` für dein Garmin-Modell herunter.
+3. Verbinde die Uhr per USB.
+4. Kopiere die Datei nach `GARMIN/APPS`.
+5. Trenne die Uhr und aktiviere **Fleur** in der Ziffernblatt-Auswahl.
 
-1. Connect IQ SDK installieren.
-2. Garmin Monkey-C-Erweiterung in VS Code verwenden oder `monkeyc` über die Kommandozeile aufrufen.
-3. Simulator-Ziel auswählen (z. B. `venu3`).
-4. Projekt bauen und im Simulator testen.
-5. Für die Store-Verteilung über **Export Project** ein `.iq`-Paket erzeugen.
+## Unterstützte automatische Downloads
 
-## 2. Direktes Sideloading
+- `GarminZiffer-venu3.prg`
+- `GarminZiffer-venu3s.prg`
+- `GarminZiffer-vivoactive5.prg`
 
-Für einen privaten Test kann eine erzeugte `.prg`-Datei bei unterstützten Uhren über USB in den Ordner `Garmin/Apps/` kopiert werden.
+## GitHub Actions
 
-## 3. Connect IQ Store
+`build-watchface.yml` erzeugt Build-Artefakte. `publish-downloads.yml` kompiliert zusätzlich die drei Sideload-Dateien und schreibt sie zurück in `downloads/`.
 
-Für eine öffentliche Veröffentlichung wird das exportierte `.iq`-Paket im Connect IQ Developer Dashboard hochgeladen und von Garmin geprüft.
-
-## Aktuelle Zielgeräte
-
-Die erste Version zielt auf Venu 3, Venu 3S und vívoactive 5. Weitere Produkt-IDs können später über Garmins **Edit Products**-Funktion zum Manifest hinzugefügt werden.
+Für private Tests kann der Workflow einen temporären Developer Key erzeugen. Für dauerhaft updatefähige Store-Builds sollte ein eigener stabiler Developer Key über das Secret `GARMIN_DEVELOPER_KEY_B64` verwendet werden.
