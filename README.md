@@ -2,7 +2,7 @@
 
 Eigenständiges Garmin-Connect-IQ-Watchface für runde AMOLED-Garmin-Uhren. **Fleur** ist ein femininer Prototyp mit Rosé-, Gold- und Flieder-Akzenten und wird vollständig in Monkey C gezeichnet.
 
-![Fleur Vorschau](docs/fleur-display-preview.png)
+![Fleur Vorschau](docs/fleur-display-preview.svg)
 
 ## Funktionen
 
