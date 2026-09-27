@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   export:
-    name: Export Blush Dial .iq
+    name: Export Fleur .iq
     runs-on: ubuntu-latest
 
     steps:
@@ -47,12 +47,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          docker run --rm -v "$PWD:/workspace" -w /workspace ghcr.io/blackshadev/garmin-connectiq-tools:9.2.0 -c 'java -jar /connectiq/bin/monkeybrains.jar -e -r -w -o /workspace/dist/Blush-Dial.iq -f /workspace/monkey.jungle -y /workspace/developer_key.der'
+          docker run --rm -v "$PWD:/workspace" -w /workspace ghcr.io/blackshadev/garmin-connectiq-tools:9.2.0 -c 'java -jar /connectiq/bin/monkeybrains.jar -e -r -w -o /workspace/dist/Fleur.iq -f /workspace/monkey.jungle -y /workspace/developer_key.der'
 
       - name: Upload Connect IQ Store package
         uses: actions/upload-artifact@v4
         with:
-          name: Blush-Dial-Connect-IQ-Store
-          path: dist/Blush-Dial.iq
+          name: Fleur-Connect-IQ-Store
+          path: dist/Fleur.iq
           if-no-files-found: error
           retention-days: 90
