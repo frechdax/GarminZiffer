@@ -1,0 +1,72 @@
+name: Publish Garmin Downloads
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'downloads/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare temporary Garmin developer key
+        shell: bash
+        run: |
+          set -euo pipefail
+          openssl genrsa -out developer_key.pem 4096
+          openssl pkcs8 -topk8 -inform PEM -outform DER             -in developer_key.pem -out developer_key.der -nocrypt
+          rm developer_key.pem
+          mkdir -p downloads
+
+      - name: Build Venu 3
+        uses: blackshadev/garmin-connectiq-build-action@9.2.0
+        with:
+          projectJungle: ./monkey.jungle
+          developerKey: ./developer_key.der
+          outputPath: downloads/GarminZiffer-venu3.prg
+          device: venu3
+          typeCheck: '1'
+          extraArgs: '-w'
+
+      - name: Build Venu 3S
+        uses: blackshadev/garmin-connectiq-build-action@9.2.0
+        with:
+          projectJungle: ./monkey.jungle
+          developerKey: ./developer_key.der
+          outputPath: downloads/GarminZiffer-venu3s.prg
+          device: venu3s
+          typeCheck: '1'
+          extraArgs: '-w'
+
+      - name: Build vivoactive 5
+        uses: blackshadev/garmin-connectiq-build-action@9.2.0
+        with:
+          projectJungle: ./monkey.jungle
+          developerKey: ./developer_key.der
+          outputPath: downloads/GarminZiffer-vivoactive5.prg
+          device: vivoactive5
+          typeCheck: '1'
+          extraArgs: '-w'
+
+      - name: Commit downloadable PRG files
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add downloads/*.prg
+          if git diff --cached --quiet; then
+            echo "No downloadable binaries changed."
+            exit 0
+          fi
+          git commit -m "Update downloadable Garmin builds [skip ci]"
+          git push
