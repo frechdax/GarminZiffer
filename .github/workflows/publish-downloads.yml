@@ -27,6 +27,26 @@ jobs:
           rm developer_key.pem
           mkdir -p downloads
 
+      - name: Build Venu 4 45mm
+        uses: blackshadev/garmin-connectiq-build-action@9.2.0
+        with:
+          projectJungle: ./monkey.jungle
+          developerKey: ./developer_key.der
+          outputPath: downloads/GarminZiffer-venu445mm.prg
+          device: venu445mm
+          typeCheck: '1'
+          extraArgs: '-w'
+
+      - name: Build Venu 4 41mm
+        uses: blackshadev/garmin-connectiq-build-action@9.2.0
+        with:
+          projectJungle: ./monkey.jungle
+          developerKey: ./developer_key.der
+          outputPath: downloads/GarminZiffer-venu441mm.prg
+          device: venu441mm
+          typeCheck: '1'
+          extraArgs: '-w'
+
       - name: Build Venu 3
         uses: blackshadev/garmin-connectiq-build-action@9.2.0
         with:
