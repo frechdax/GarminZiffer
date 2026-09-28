@@ -10,6 +10,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: publish-garmin-downloads
+  cancel-in-progress: false
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -89,4 +93,12 @@ jobs:
             exit 0
           fi
           git commit -m "Update downloadable Garmin builds [skip ci]"
+          for attempt in 1 2 3; do
+            if git push; then
+              exit 0
+            fi
+            echo "Push raced with another update; rebasing and retrying ($attempt/3)."
+            git fetch origin main
+            git rebase origin/main
+          done
           git push
