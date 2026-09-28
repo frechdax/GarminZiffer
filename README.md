@@ -18,6 +18,10 @@ Eigenständiges Garmin-Connect-IQ-Watchface für runde AMOLED-Garmin-Uhren. **Fl
 
 ## Aktuell gebaute Geräte
 
+**Primäres Testgerät:** Garmin Venu 4 45 mm (`venu445mm`, 454 × 454)
+
+- Garmin Venu 4 45 mm (`venu445mm`)
+- Garmin Venu 4 41 mm (`venu441mm`)
 - Garmin Venu 3 (`venu3`)
 - Garmin Venu 3S (`venu3s`)
 - Garmin vívoactive 5 (`vivoactive5`)
@@ -30,6 +34,8 @@ Bei Änderungen auf `main` bauen GitHub Actions automatisch `.prg`-Dateien. Zus�
 
 Direktlinks nach erfolgreichem Build:
 
+- [Venu 4 45 mm](downloads/GarminZiffer-venu445mm.prg)
+- [Venu 4 41 mm](downloads/GarminZiffer-venu441mm.prg)
 - [Venu 3](downloads/GarminZiffer-venu3.prg)
 - [Venu 3S](downloads/GarminZiffer-venu3s.prg)
 - [vívoactive 5](downloads/GarminZiffer-vivoactive5.prg)
