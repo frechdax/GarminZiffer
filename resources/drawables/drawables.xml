@@ -8,7 +8,7 @@
             scaleX="100%"
             scaleY="100%"
             scaleRelativeTo="screen">
-        <palette disableTransparency="true">
+        <palette disableTransparency="false">
             <color>000000</color>
             <color>F5F4FA</color>
             <color>F3A332</color>
