@@ -199,7 +199,7 @@ class GarminZifferView extends WatchUi.WatchFace {
         dc.drawText(cx, (154 * scale).toNumber(), Graphics.FONT_NUMBER_MEDIUM, timeText, Graphics.TEXT_JUSTIFY_CENTER);
 
         dc.setColor(COLOR_ROSE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, (236 * scale).toNumber(), Graphics.FONT_XTINY, "FLEUR ROSÉ", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(cx, (236 * scale).toNumber(), Graphics.FONT_XTINY, "FLEUR", Graphics.TEXT_JUSTIFY_CENTER);
 
         drawMetricSection(dc, cx, cy, scale);
     }
@@ -214,37 +214,107 @@ class GarminZifferView extends WatchUi.WatchFace {
             goalPercent = 100;
         }
 
-        var y = cy + (113 * scale).toNumber();
-        var gap = (104 * scale).toNumber();
-        var radius = (39 * scale).toNumber();
-        if (radius < 30) {
-            radius = 30;
+        var chipY = cy + (110 * scale).toNumber();
+        var chipW = (112 * scale).toNumber();
+        var chipH = (32 * scale).toNumber();
+        var chipGap = (66 * scale).toNumber();
+
+        if (chipW < 96) {
+            chipW = 96;
+        }
+        if (chipH < 28) {
+            chipH = 28;
         }
 
-        drawMetric(dc, cx - gap, y, radius, COLOR_ROSE, formatSteps(steps), "STEPS", safeProgress(steps, STEP_GOAL));
-        drawMetric(dc, cx, y, radius, COLOR_GOLD, goalPercent.format("%d") + "%", "GOAL", safeProgress(goalPercent, 100));
-        drawMetric(dc, cx + gap, y, radius, COLOR_LILAC, battery.format("%d") + "%", "BAT", safeProgress(battery, 100));
-    }
+        drawInfoChip(dc, cx - chipGap, chipY, chipW, chipH, COLOR_ROSE, "STEPS", formatSteps(steps));
+        drawInfoChip(dc, cx + chipGap, chipY, chipW, chipH, COLOR_LILAC, "BAT", battery.format("%d") + "%");
 
-    private function drawMetric(dc, x, y, radius, accent, valueText, label, progress) {
-        dc.setColor(COLOR_PANEL, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(x, y, radius);
+        var barY = cy + (157 * scale).toNumber();
+        var barW = (168 * scale).toNumber();
+        var barH = (8 * scale).toNumber();
 
-        dc.setPenWidth(4);
-        dc.setColor(COLOR_TRACK, Graphics.COLOR_TRANSPARENT);
-        dc.drawArc(x, y, radius, Graphics.ARC_COUNTER_CLOCKWISE, 220, -40);
-
-        if (progress > 0.0) {
-            var endAngle = 220 - (260.0 * progress);
-            dc.setColor(accent, Graphics.COLOR_TRANSPARENT);
-            dc.drawArc(x, y, radius, Graphics.ARC_COUNTER_CLOCKWISE, 220, endAngle.toNumber());
+        if (barW < 140) {
+            barW = 140;
         }
-
-        dc.setColor(COLOR_TEXT, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(x, y - 10, Graphics.FONT_TINY, valueText, Graphics.TEXT_JUSTIFY_CENTER);
+        if (barH < 6) {
+            barH = 6;
+        }
 
         dc.setColor(COLOR_MUTED, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(x, y + 15, Graphics.FONT_XTINY, label, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(cx, barY - (19 * scale).toNumber(), Graphics.FONT_XTINY,
+            "GOAL " + goalPercent.format("%d") + "%",
+            Graphics.TEXT_JUSTIFY_CENTER);
+
+        drawGoalBar(dc, cx, barY, barW, barH, safeProgress(goalPercent, 100));
+    }
+
+    private function drawInfoChip(dc, x, y, width, height, accent, label, valueText) {
+        var radius = height / 2;
+        var left = x - (width / 2);
+        var top = y - (height / 2);
+        var bodyWidth = width - (radius * 2);
+
+        dc.setColor(COLOR_PANEL, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(left + radius, y, radius);
+        dc.fillCircle(left + radius + bodyWidth, y, radius);
+        dc.fillRectangle(left + radius, top, bodyWidth, height);
+
+        dc.setColor(accent, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(left + radius, y, 4);
+
+        dc.setColor(COLOR_MUTED, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(x, y - 9, Graphics.FONT_XTINY, label, Graphics.TEXT_JUSTIFY_CENTER);
+
+        dc.setColor(COLOR_TEXT, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(x, y + 7, Graphics.FONT_TINY, valueText, Graphics.TEXT_JUSTIFY_CENTER);
+    }
+
+    private function drawGoalBar(dc, cx, y, width, height, progress) {
+        var radius = height / 2;
+        var left = cx - (width / 2);
+        var top = y - radius;
+        var bodyWidth = width - (radius * 2);
+
+        dc.setColor(COLOR_PANEL, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(left + radius, y, radius);
+        dc.fillCircle(left + radius + bodyWidth, y, radius);
+        dc.fillRectangle(left + radius, top, bodyWidth, height);
+
+        if (progress <= 0.0) {
+            return;
+        }
+
+        var fillWidth = (width.toFloat() * progress).toNumber();
+        if (fillWidth < height) {
+            fillWidth = height;
+        }
+        if (fillWidth > width) {
+            fillWidth = width;
+        }
+
+        dc.setColor(COLOR_GOLD, Graphics.COLOR_TRANSPARENT);
+
+        if (fillWidth <= height) {
+            dc.fillCircle(left + radius, y, radius);
+            return;
+        }
+
+        var fillBodyWidth = fillWidth - (radius * 2);
+        if (fillBodyWidth < 0) {
+            fillBodyWidth = 0;
+        }
+
+        dc.fillCircle(left + radius, y, radius);
+
+        var rightCenter = left + fillWidth - radius;
+        if (rightCenter < left + radius) {
+            rightCenter = left + radius;
+        }
+        dc.fillCircle(rightCenter, y, radius);
+
+        if (fillBodyWidth > 0) {
+            dc.fillRectangle(left + radius, top, fillBodyWidth, height);
+        }
     }
 
     private function safeProgress(value, maximum) {
