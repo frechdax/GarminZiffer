@@ -16,6 +16,8 @@ jobs:
       fail-fast: false
       matrix:
         device:
+          - venu445mm
+          - venu441mm
           - venu3
           - venu3s
           - vivoactive5
