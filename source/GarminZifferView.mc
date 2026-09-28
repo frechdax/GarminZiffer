@@ -6,9 +6,9 @@ using Toybox.Time.Gregorian as Gregorian;
 using Toybox.WatchUi as WatchUi;
 
 class GarminZifferView extends WatchUi.WatchFace {
-    const COLOR_BG_OUTER = 0x130910;
-    const COLOR_BG_MID = 0x24121D;
-    const COLOR_BG_INNER = 0x351B29;
+    const COLOR_BG_OUTER = 0x2A111F;
+    const COLOR_BG_MID = 0x3A1C2B;
+    const COLOR_BG_INNER = 0x4A2437;
     const COLOR_PANEL = 0x2A1621;
     const COLOR_PANEL_EDGE = 0x543244;
 
@@ -67,17 +67,17 @@ class GarminZifferView extends WatchUi.WatchFace {
         dc.clear();
 
         dc.setColor(COLOR_BG_MID, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(cx, cy, ((size / 2) - (10 * scale)).toNumber());
+        dc.fillCircle(cx, cy, ((size / 2) - (2 * scale)).toNumber());
 
         dc.setColor(COLOR_BG_INNER, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(cx, cy - (10 * scale).toNumber(), ((size / 2) - (38 * scale)).toNumber());
+        dc.fillCircle(cx, cy - (10 * scale).toNumber(), ((size / 2) - (20 * scale)).toNumber());
 
         dc.setPenWidth(2);
         dc.setColor(COLOR_PANEL_EDGE, Graphics.COLOR_TRANSPARENT);
-        dc.drawCircle(cx, cy, ((size / 2) - (14 * scale)).toNumber());
+        dc.drawCircle(cx, cy, ((size / 2) - (7 * scale)).toNumber());
 
         dc.setColor(COLOR_DEEP_ROSE, Graphics.COLOR_TRANSPARENT);
-        dc.drawCircle(cx, cy, ((size / 2) - (24 * scale)).toNumber());
+        dc.drawCircle(cx, cy, ((size / 2) - (15 * scale)).toNumber());
 
         drawMoon(dc, cx, (68 * scale).toNumber(), scale);
         drawFlorals(dc, cx, cy, scale);
