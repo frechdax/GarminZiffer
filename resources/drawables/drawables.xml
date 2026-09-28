@@ -4,7 +4,27 @@
             filename="autumn_reference.svg"
             dithering="none"
             compress="true"
+            automaticPalette="false"
             scaleX="100%"
             scaleY="100%"
-            scaleRelativeTo="screen" />
+            scaleRelativeTo="screen">
+        <palette disableTransparency="true">
+            <color>000000</color>
+            <color>F5F4FA</color>
+            <color>F3A332</color>
+            <color>D94686</color>
+            <color>AA315F</color>
+            <color>C93679</color>
+            <color>D94A91</color>
+            <color>B73B75</color>
+            <color>E18A31</color>
+            <color>C87934</color>
+            <color>A84F34</color>
+            <color>B97447</color>
+            <color>C78243</color>
+            <color>543A4D</color>
+            <color>8B5A2B</color>
+            <color>E8D2B0</color>
+        </palette>
+    </bitmap>
 </drawables>

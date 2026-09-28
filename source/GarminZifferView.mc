@@ -17,7 +17,14 @@ class GarminZifferView extends WatchUi.WatchFace {
     }
 
     function onLayout(dc) {
-        _background = WatchUi.loadResource(Rez.Drawables.AutumnReference);
+        _background = null;
+
+        try {
+            _background = WatchUi.loadResource(Rez.Drawables.AutumnReference);
+        } catch (e) {
+            System.println("AutumnReference could not be loaded; using fallback decor.");
+            _background = null;
+        }
     }
 
     function onShow() {
@@ -50,8 +57,20 @@ class GarminZifferView extends WatchUi.WatchFace {
             return;
         }
 
+        var drewBackground = false;
+
         if (_background != null) {
-            dc.drawBitmap(0, 0, _background);
+            try {
+                dc.drawBitmap(0, 0, _background);
+                drewBackground = true;
+            } catch (e) {
+                System.println("AutumnReference could not be drawn; using fallback decor.");
+                _background = null;
+            }
+        }
+
+        if (!drewBackground) {
+            drawFallbackDecor(dc, cx, cy, scale);
         }
 
         drawReferenceLayout(dc, cx, cy, scale);
@@ -118,18 +137,22 @@ class GarminZifferView extends WatchUi.WatchFace {
 
     private function getLatestHeartRate() {
         try {
-            var iterator = SensorHistory.getHeartRateHistory({
-                :period => 1,
-                :order => SensorHistory.ORDER_NEWEST_FIRST
-            });
+            if ((Toybox has :SensorHistory) &&
+                (Toybox.SensorHistory has :getHeartRateHistory)) {
+                var iterator = Toybox.SensorHistory.getHeartRateHistory({
+                    :period => 1,
+                    :order => Toybox.SensorHistory.ORDER_NEWEST_FIRST
+                });
 
-            if (iterator != null) {
-                var sample = iterator.next();
-                if (sample != null && sample.data != null) {
-                    return sample.data.toNumber();
+                if (iterator != null) {
+                    var sample = iterator.next();
+                    if (sample != null && sample.data != null) {
+                        return sample.data.toNumber();
+                    }
                 }
             }
         } catch (e) {
+            System.println("Heart-rate history unavailable in this runtime.");
         }
 
         return null;
@@ -137,18 +160,22 @@ class GarminZifferView extends WatchUi.WatchFace {
 
     private function getLatestBodyBattery() {
         try {
-            var iterator = SensorHistory.getBodyBatteryHistory({
-                :period => 1,
-                :order => SensorHistory.ORDER_NEWEST_FIRST
-            });
+            if ((Toybox has :SensorHistory) &&
+                (Toybox.SensorHistory has :getBodyBatteryHistory)) {
+                var iterator = Toybox.SensorHistory.getBodyBatteryHistory({
+                    :period => 1,
+                    :order => Toybox.SensorHistory.ORDER_NEWEST_FIRST
+                });
 
-            if (iterator != null) {
-                var sample = iterator.next();
-                if (sample != null && sample.data != null) {
-                    return sample.data.toNumber();
+                if (iterator != null) {
+                    var sample = iterator.next();
+                    if (sample != null && sample.data != null) {
+                        return sample.data.toNumber();
+                    }
                 }
             }
         } catch (e) {
+            System.println("Body Battery history unavailable in this runtime.");
         }
 
         return null;
@@ -160,6 +187,59 @@ class GarminZifferView extends WatchUi.WatchFace {
         }
 
         return value.format("%d");
+    }
+
+    private function drawFallbackDecor(dc, cx, cy, scale) {
+        // Lightweight fallback used if the full bitmap cannot fit in graphics memory.
+        var rose = 0xD94686;
+        var orange = 0xC87934;
+        var cream = 0xE8D2B0;
+        var brown = 0x8B5A2B;
+
+        drawFallbackFlower(dc, cx, cy - (170 * scale).toNumber(), scale, rose, cream);
+        drawFallbackFlower(dc, cx + (85 * scale).toNumber(), cy - (145 * scale).toNumber(), scale * 0.8, orange, cream);
+        drawFallbackFlower(dc, cx + (95 * scale).toNumber(), cy + (150 * scale).toNumber(), scale * 0.8, rose, cream);
+
+        drawFallbackLeaf(dc, cx - (155 * scale).toNumber(), cy - (85 * scale).toNumber(), scale, rose);
+        drawFallbackLeaf(dc, cx - (170 * scale).toNumber(), cy + (35 * scale).toNumber(), scale, orange);
+        drawFallbackLeaf(dc, cx - (125 * scale).toNumber(), cy + (145 * scale).toNumber(), scale, rose);
+        drawFallbackLeaf(dc, cx + (155 * scale).toNumber(), cy - (85 * scale).toNumber(), scale, orange);
+        drawFallbackLeaf(dc, cx + (170 * scale).toNumber(), cy + (25 * scale).toNumber(), scale, brown);
+        drawFallbackLeaf(dc, cx + (125 * scale).toNumber(), cy + (135 * scale).toNumber(), scale, orange);
+
+        dc.setColor(orange, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(2);
+        dc.drawLine(cx - (55 * scale).toNumber(), cy + (178 * scale).toNumber(),
+                    cx - (50 * scale).toNumber(), cy + (125 * scale).toNumber());
+        dc.drawLine(cx + (50 * scale).toNumber(), cy + (178 * scale).toNumber(),
+                    cx + (55 * scale).toNumber(), cy + (128 * scale).toNumber());
+    }
+
+    private function drawFallbackFlower(dc, x, y, scale, petalColor, centerColor) {
+        var r = (7 * scale).toNumber();
+        if (r < 3) {
+            r = 3;
+        }
+
+        dc.setColor(petalColor, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(x - r, y, r);
+        dc.fillCircle(x + r, y, r);
+        dc.fillCircle(x, y - r, r);
+        dc.fillCircle(x, y + r, r);
+
+        dc.setColor(centerColor, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(x, y, (r / 2).toNumber());
+    }
+
+    private function drawFallbackLeaf(dc, x, y, scale, color) {
+        var r = (8 * scale).toNumber();
+        if (r < 4) {
+            r = 4;
+        }
+
+        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(x - (r / 2), y - r, r);
+        dc.fillCircle(x + (r / 2), y + r, r);
     }
 
     private function drawHeart(dc, x, y, scale) {
@@ -192,7 +272,11 @@ class GarminZifferView extends WatchUi.WatchFace {
         var dy = (12 * scale).toNumber();
 
         dc.setColor(COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth((3 * scale).toNumber());
+        var penWidth = (3 * scale).toNumber();
+        if (penWidth < 1) {
+            penWidth = 1;
+        }
+        dc.setPenWidth(penWidth);
         dc.drawLine(x + (dx / 2), y - dy, x - (dx / 2), y);
         dc.drawLine(x - (dx / 2), y, x + (dx / 3), y);
         dc.drawLine(x + (dx / 3), y, x - (dx / 2), y + dy);
