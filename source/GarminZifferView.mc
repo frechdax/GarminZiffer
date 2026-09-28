@@ -79,7 +79,6 @@ class GarminZifferView extends WatchUi.WatchFace {
     private function drawReferenceLayout(dc, cx, cy, scale) {
         var clock = System.getClockTime();
         var rawHour = clock.hour;
-        var suffix = rawHour < 12 ? "AM" : "PM";
         var hour = rawHour % 12;
 
         if (hour == 0) {
@@ -98,19 +97,12 @@ class GarminZifferView extends WatchUi.WatchFace {
         var bodyBattery = getLatestBodyBattery();
         var deviceBattery = System.getSystemStats().battery.toNumber();
 
-        // Top row: AM/PM, heart, heart rate.
+        // Top row: only heart icon + heart rate.
         dc.setColor(COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText((196 * scale).toNumber(), (137 * scale).toNumber(),
-            Graphics.FONT_XTINY, suffix, Graphics.TEXT_JUSTIFY_CENTER);
+        drawHeart(dc, (214 * scale).toNumber(), (151 * scale).toNumber(), scale);
 
-        drawHeart(dc, (248 * scale).toNumber(), (153 * scale).toNumber(), scale);
-
-        dc.drawText((292 * scale).toNumber(), (137 * scale).toNumber(),
+        dc.drawText((268 * scale).toNumber(), (137 * scale).toNumber(),
             Graphics.FONT_XTINY, valueOrDash(heartRate), Graphics.TEXT_JUSTIFY_CENTER);
-
-        // The same small phrase visible in the reference face.
-        dc.drawText((286 * scale).toNumber(), (171 * scale).toNumber(),
-            Graphics.FONT_XTINY, "IN DEN", Graphics.TEXT_JUSTIFY_CENTER);
 
         // Large two-color time.
         dc.setColor(COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
