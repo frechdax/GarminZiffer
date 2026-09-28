@@ -8,6 +8,8 @@
       launcherIcon="@Drawables.LauncherIcon"
       minSdkVersion="5.2.0">
     <iq:products>
+      <iq:product id="venu445mm"/>
+      <iq:product id="venu441mm"/>
       <iq:product id="venu3"/>
       <iq:product id="venu3s"/>
       <iq:product id="vivoactive5"/>
