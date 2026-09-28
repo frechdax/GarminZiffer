@@ -6,19 +6,17 @@ using Toybox.Time.Gregorian as Gregorian;
 using Toybox.WatchUi as WatchUi;
 
 class GarminZifferView extends WatchUi.WatchFace {
-    const COLOR_BG_OUTER = 0x2A111F;
-    const COLOR_BG_MID = 0x3A1C2B;
-    const COLOR_BG_INNER = 0x4A2437;
-    const COLOR_PANEL = 0x2A1621;
-    const COLOR_PANEL_EDGE = 0x543244;
-
-    const COLOR_TEXT = 0xFFF3F6;
-    const COLOR_MUTED = 0xE6C4D0;
-    const COLOR_ROSE = 0xF0A7BC;
-    const COLOR_DEEP_ROSE = 0xD887A2;
-    const COLOR_GOLD = 0xE5BE84;
-    const COLOR_LILAC = 0xC9A9EA;
-    const COLOR_TRACK = 0x684054;
+    const COLOR_BG = 0x000000;
+    const COLOR_WHITE = 0xF6F2F4;
+    const COLOR_GOLD = 0xF2B24D;
+    const COLOR_PINK = 0xF26DA8;
+    const COLOR_ROSE = 0xE995B6;
+    const COLOR_LILAC = 0xB78AE6;
+    const COLOR_BROWN = 0x8B5A2B;
+    const COLOR_BRONZE = 0xB8742A;
+    const COLOR_BEIGE = 0xE8D2B0;
+    const COLOR_MUTED = 0xD8C8D1;
+    const COLOR_DIM = 0x6D5865;
 
     const STEP_GOAL = 10000;
 
@@ -53,139 +51,47 @@ class GarminZifferView extends WatchUi.WatchFace {
         var cx = w / 2;
         var cy = h / 2;
 
-        drawRoseBackground(dc, cx, cy, size, scale);
+        dc.setColor(COLOR_BG, COLOR_BG);
+        dc.clear();
 
         if (_lowPower) {
             drawAlwaysOn(dc, cx, cy, scale);
         } else {
-            drawFullFace(dc, cx, cy, scale);
+            drawDecorRing(dc, cx, cy, scale);
+            drawTopInfo(dc, cx, cy, scale);
+            drawMainTime(dc, cx, cy, scale);
+            drawBottomInfo(dc, cx, cy, scale);
         }
     }
 
-    private function drawRoseBackground(dc, cx, cy, size, scale) {
-        dc.setColor(COLOR_BG_OUTER, COLOR_BG_OUTER);
-        dc.clear();
-
-        dc.setColor(COLOR_BG_MID, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(cx, cy, ((size / 2) - (2 * scale)).toNumber());
-
-        dc.setColor(COLOR_BG_INNER, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(cx, cy - (10 * scale).toNumber(), ((size / 2) - (20 * scale)).toNumber());
-
-        dc.setPenWidth(2);
-        dc.setColor(COLOR_PANEL_EDGE, Graphics.COLOR_TRANSPARENT);
-        dc.drawCircle(cx, cy, ((size / 2) - (7 * scale)).toNumber());
-
-        dc.setColor(COLOR_DEEP_ROSE, Graphics.COLOR_TRANSPARENT);
-        dc.drawCircle(cx, cy, ((size / 2) - (15 * scale)).toNumber());
-
-        drawMoon(dc, cx, (68 * scale).toNumber(), scale);
-        drawFlorals(dc, cx, cy, scale);
-        drawBottomSprig(dc, cx, cy + (166 * scale).toNumber(), scale);
-    }
-
-    private function drawMoon(dc, cx, y, scale) {
-        var r = (15 * scale).toNumber();
-        if (r < 9) {
-            r = 9;
-        }
-
-        dc.setColor(COLOR_GOLD, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(cx, y, r);
-
-        dc.setColor(COLOR_BG_OUTER, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(cx + (6 * scale).toNumber(), y - (3 * scale).toNumber(), r);
-
-        drawStar(dc, cx - (39 * scale).toNumber(), y + (2 * scale).toNumber(), scale, COLOR_GOLD);
-        drawStar(dc, cx + (43 * scale).toNumber(), y - (7 * scale).toNumber(), scale, COLOR_ROSE);
-    }
-
-    private function drawStar(dc, x, y, scale, color) {
-        var arm = (5 * scale).toNumber();
-        if (arm < 3) {
-            arm = 3;
-        }
-
-        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(1);
-        dc.drawLine(x - arm, y, x + arm, y);
-        dc.drawLine(x, y - arm, x, y + arm);
-    }
-
-    private function drawFlorals(dc, cx, cy, scale) {
-        var left = cx - (155 * scale).toNumber();
-        var right = cx + (155 * scale).toNumber();
-        var top = cy - (96 * scale).toNumber();
-
-        drawFlower(dc, left, top, scale, COLOR_ROSE);
-        drawFlower(dc, right, top, scale, COLOR_ROSE);
-
-        drawFlower(dc, left - (12 * scale).toNumber(), top + (35 * scale).toNumber(), scale * 0.75, COLOR_DEEP_ROSE);
-        drawFlower(dc, right + (12 * scale).toNumber(), top + (35 * scale).toNumber(), scale * 0.75, COLOR_DEEP_ROSE);
-
-        drawLeaf(dc, left - (17 * scale).toNumber(), top + (67 * scale).toNumber(), scale, COLOR_LILAC);
-        drawLeaf(dc, right + (17 * scale).toNumber(), top + (67 * scale).toNumber(), scale, COLOR_LILAC);
-
-        dc.setColor(COLOR_TRACK, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(2);
-        dc.drawLine(left + (3 * scale).toNumber(), top + (10 * scale).toNumber(), left - (20 * scale).toNumber(), top + (88 * scale).toNumber());
-        dc.drawLine(right - (3 * scale).toNumber(), top + (10 * scale).toNumber(), right + (20 * scale).toNumber(), top + (88 * scale).toNumber());
-    }
-
-    private function drawFlower(dc, x, y, scale, color) {
-        var p = (6 * scale).toNumber();
-        if (p < 3) {
-            p = 3;
-        }
-
-        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(x - p, y, p);
-        dc.fillCircle(x + p, y, p);
-        dc.fillCircle(x, y - p, p);
-        dc.fillCircle(x, y + p, p);
-
-        dc.setColor(COLOR_GOLD, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(x, y, (p / 2).toNumber());
-    }
-
-    private function drawLeaf(dc, x, y, scale, color) {
-        var r = (5 * scale).toNumber();
-        if (r < 3) {
-            r = 3;
-        }
-
-        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(x - r, y, r);
-        dc.fillCircle(x + r, y - r, r);
-    }
-
-    private function drawBottomSprig(dc, x, y, scale) {
-        var arm = (16 * scale).toNumber();
-        if (arm < 10) {
-            arm = 10;
-        }
-
-        dc.setColor(COLOR_GOLD, Graphics.COLOR_TRANSPARENT);
-        dc.setPenWidth(2);
-        dc.drawLine(x, y + arm, x, y);
-        dc.drawLine(x, y + (arm / 2), x - arm, y);
-        dc.drawLine(x, y + (arm / 2), x + arm, y);
-
-        dc.setColor(COLOR_ROSE, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(x - arm, y, 4);
-        dc.setColor(COLOR_LILAC, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(x + arm, y, 4);
-    }
-
-    private function drawFullFace(dc, cx, cy, scale) {
-        var now = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
-        var dateText = now.day.format("%02d") + "." + now.month.format("%02d") + ".";
-
-        dc.setColor(COLOR_MUTED, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, (108 * scale).toNumber(), Graphics.FONT_SMALL, dateText, Graphics.TEXT_JUSTIFY_CENTER);
-
+    private function drawTopInfo(dc, cx, cy, scale) {
         var clock = System.getClockTime();
         var hour = clock.hour;
+        var suffix = "";
+
+        if (!System.getDeviceSettings().is24Hour) {
+            suffix = hour >= 12 ? "PM" : "AM";
+        }
+
+        var activity = ActivityMonitor.getInfo();
+        var steps = (activity.steps == null) ? 0 : activity.steps;
+        var compactSteps = formatSteps(steps);
+        var topY = cy - (57 * scale).toNumber();
+
+        dc.setColor(COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx - (48 * scale).toNumber(), topY, Graphics.FONT_SMALL, suffix, Graphics.TEXT_JUSTIFY_CENTER);
+
+        dc.setColor(COLOR_PINK, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(cx, topY + (13 * scale).toNumber(), 4);
+
+        dc.setColor(COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx + (48 * scale).toNumber(), topY, Graphics.FONT_SMALL, compactSteps, Graphics.TEXT_JUSTIFY_CENTER);
+    }
+
+    private function drawMainTime(dc, cx, cy, scale) {
+        var clock = System.getClockTime();
+        var hour = clock.hour;
+
         if (!System.getDeviceSettings().is24Hour) {
             hour = hour % 12;
             if (hour == 0) {
@@ -193,151 +99,44 @@ class GarminZifferView extends WatchUi.WatchFace {
             }
         }
 
-        var timeText = hour.format("%02d") + ":" + clock.min.format("%02d");
+        var hh = hour.format("%02d");
+        var mm = clock.min.format("%02d");
+        var y = cy - (9 * scale).toNumber();
+        var gap = (49 * scale).toNumber();
 
-        dc.setColor(COLOR_TEXT, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, (154 * scale).toNumber(), Graphics.FONT_NUMBER_MEDIUM, timeText, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.setColor(COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx - gap, y, Graphics.FONT_NUMBER_MEDIUM, hh, Graphics.TEXT_JUSTIFY_CENTER);
 
-        dc.setColor(COLOR_ROSE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, (236 * scale).toNumber(), Graphics.FONT_XTINY, "FLEUR", Graphics.TEXT_JUSTIFY_CENTER);
-
-        drawMetricSection(dc, cx, cy, scale);
+        dc.setColor(COLOR_GOLD, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx + gap, y, Graphics.FONT_NUMBER_MEDIUM, mm, Graphics.TEXT_JUSTIFY_CENTER);
     }
 
-    private function drawMetricSection(dc, cx, cy, scale) {
+    private function drawBottomInfo(dc, cx, cy, scale) {
+        var now = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
+        var dateText = now.day.format("%02d") + "." + now.month.format("%02d");
+        var battery = System.getSystemStats().battery.toNumber();
         var activity = ActivityMonitor.getInfo();
         var steps = (activity.steps == null) ? 0 : activity.steps;
-        var battery = System.getSystemStats().battery.toNumber();
-
         var goalPercent = (steps * 100) / STEP_GOAL;
+
         if (goalPercent > 100) {
             goalPercent = 100;
         }
 
-        var chipY = cy + (110 * scale).toNumber();
-        var chipW = (112 * scale).toNumber();
-        var chipH = (32 * scale).toNumber();
-        var chipGap = (66 * scale).toNumber();
+        var row1 = cy + (53 * scale).toNumber();
+        var row2 = cy + (82 * scale).toNumber();
 
-        if (chipW < 96) {
-            chipW = 96;
-        }
-        if (chipH < 28) {
-            chipH = 28;
-        }
-
-        drawInfoChip(dc, cx - chipGap, chipY, chipW, chipH, COLOR_ROSE, "STEPS", formatSteps(steps));
-        drawInfoChip(dc, cx + chipGap, chipY, chipW, chipH, COLOR_LILAC, "BAT", battery.format("%d") + "%");
-
-        var barY = cy + (157 * scale).toNumber();
-        var barW = (168 * scale).toNumber();
-        var barH = (8 * scale).toNumber();
-
-        if (barW < 140) {
-            barW = 140;
-        }
-        if (barH < 6) {
-            barH = 6;
-        }
+        dc.setColor(COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx - (58 * scale).toNumber(), row1, Graphics.FONT_SMALL, dateText, Graphics.TEXT_JUSTIFY_CENTER);
 
         dc.setColor(COLOR_MUTED, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, barY - (19 * scale).toNumber(), Graphics.FONT_XTINY,
-            "GOAL " + goalPercent.format("%d") + "%",
-            Graphics.TEXT_JUSTIFY_CENTER);
+        dc.fillCircle(cx, row1 + (13 * scale).toNumber(), 2);
 
-        drawGoalBar(dc, cx, barY, barW, barH, safeProgress(goalPercent, 100));
-    }
-
-    private function drawInfoChip(dc, x, y, width, height, accent, label, valueText) {
-        var radius = height / 2;
-        var left = x - (width / 2);
-        var top = y - (height / 2);
-        var bodyWidth = width - (radius * 2);
-
-        dc.setColor(COLOR_PANEL, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(left + radius, y, radius);
-        dc.fillCircle(left + radius + bodyWidth, y, radius);
-        dc.fillRectangle(left + radius, top, bodyWidth, height);
-
-        dc.setColor(accent, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(left + radius, y, 4);
-
-        dc.setColor(COLOR_MUTED, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(x, y - 9, Graphics.FONT_XTINY, label, Graphics.TEXT_JUSTIFY_CENTER);
-
-        dc.setColor(COLOR_TEXT, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(x, y + 7, Graphics.FONT_TINY, valueText, Graphics.TEXT_JUSTIFY_CENTER);
-    }
-
-    private function drawGoalBar(dc, cx, y, width, height, progress) {
-        var radius = height / 2;
-        var left = cx - (width / 2);
-        var top = y - radius;
-        var bodyWidth = width - (radius * 2);
-
-        dc.setColor(COLOR_PANEL, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(left + radius, y, radius);
-        dc.fillCircle(left + radius + bodyWidth, y, radius);
-        dc.fillRectangle(left + radius, top, bodyWidth, height);
-
-        if (progress <= 0.0) {
-            return;
-        }
-
-        var fillWidth = (width.toFloat() * progress).toNumber();
-        if (fillWidth < height) {
-            fillWidth = height;
-        }
-        if (fillWidth > width) {
-            fillWidth = width;
-        }
+        dc.setColor(COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx + (58 * scale).toNumber(), row1, Graphics.FONT_SMALL, battery.format("%d") + "%", Graphics.TEXT_JUSTIFY_CENTER);
 
         dc.setColor(COLOR_GOLD, Graphics.COLOR_TRANSPARENT);
-
-        if (fillWidth <= height) {
-            dc.fillCircle(left + radius, y, radius);
-            return;
-        }
-
-        var fillBodyWidth = fillWidth - (radius * 2);
-        if (fillBodyWidth < 0) {
-            fillBodyWidth = 0;
-        }
-
-        dc.fillCircle(left + radius, y, radius);
-
-        var rightCenter = left + fillWidth - radius;
-        if (rightCenter < left + radius) {
-            rightCenter = left + radius;
-        }
-        dc.fillCircle(rightCenter, y, radius);
-
-        if (fillBodyWidth > 0) {
-            dc.fillRectangle(left + radius, top, fillBodyWidth, height);
-        }
-    }
-
-    private function safeProgress(value, maximum) {
-        if (value <= 0 || maximum <= 0) {
-            return 0.0;
-        }
-
-        var progress = value.toFloat() / maximum.toFloat();
-        if (progress > 1.0) {
-            return 1.0;
-        }
-
-        return progress;
-    }
-
-    private function formatSteps(steps) {
-        if (steps >= 1000) {
-            var whole = steps / 1000;
-            var decimal = (steps % 1000) / 100;
-            return whole.format("%d") + "." + decimal.format("%d") + "k";
-        }
-
-        return steps.format("%d");
+        dc.drawText(cx, row2, Graphics.FONT_XTINY, "GOAL " + goalPercent.format("%d") + "%", Graphics.TEXT_JUSTIFY_CENTER);
     }
 
     private function drawAlwaysOn(dc, cx, cy, scale) {
@@ -352,12 +151,141 @@ class GarminZifferView extends WatchUi.WatchFace {
         }
 
         var timeText = hour.format("%02d") + ":" + clock.min.format("%02d");
-        var shift = ((clock.min % 5) - 2) * 2;
 
-        dc.setColor(COLOR_TEXT, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx + shift, cy - (24 * scale).toNumber(), Graphics.FONT_MEDIUM, timeText, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.setColor(COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx, cy - (20 * scale).toNumber(), Graphics.FONT_MEDIUM, timeText, Graphics.TEXT_JUSTIFY_CENTER);
 
-        dc.setColor(COLOR_ROSE, Graphics.COLOR_TRANSPARENT);
-        dc.fillCircle(cx + shift, cy + (27 * scale).toNumber(), 3);
+        dc.setColor(COLOR_GOLD, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(cx, cy + (26 * scale).toNumber(), 3);
+    }
+
+    private function drawDecorRing(dc, cx, cy, scale) {
+        drawPumpkin(dc, cx - (96 * scale).toNumber(), cy - (91 * scale).toNumber(), scale);
+
+        drawFlower(dc, cx - (20 * scale).toNumber(), cy - (112 * scale).toNumber(), scale, COLOR_PINK, COLOR_BEIGE);
+        drawBud(dc, cx + (12 * scale).toNumber(), cy - (115 * scale).toNumber(), scale, COLOR_PINK);
+        drawFlower(dc, cx + (54 * scale).toNumber(), cy - (103 * scale).toNumber(), scale * 0.9, COLOR_GOLD, COLOR_BEIGE);
+
+        drawStem(dc, cx + (92 * scale).toNumber(), cy - (94 * scale).toNumber(), scale, COLOR_BRONZE);
+        drawStem(dc, cx - (116 * scale).toNumber(), cy - (58 * scale).toNumber(), scale, COLOR_PINK);
+
+        drawLeaf(dc, cx - (126 * scale).toNumber(), cy - (12 * scale).toNumber(), scale, COLOR_PINK, true);
+        drawLeaf(dc, cx - (104 * scale).toNumber(), cy + (41 * scale).toNumber(), scale, COLOR_BRONZE, false);
+        drawLeaf(dc, cx - (62 * scale).toNumber(), cy + (105 * scale).toNumber(), scale, COLOR_PINK, false);
+
+        drawLeaf(dc, cx + (118 * scale).toNumber(), cy - (45 * scale).toNumber(), scale, COLOR_BRONZE, true);
+        drawLeaf(dc, cx + (122 * scale).toNumber(), cy + (2 * scale).toNumber(), scale, COLOR_BEIGE, false);
+        drawLeaf(dc, cx + (84 * scale).toNumber(), cy + (66 * scale).toNumber(), scale, COLOR_DIM, true);
+        drawLeaf(dc, cx + (52 * scale).toNumber(), cy + (105 * scale).toNumber(), scale, COLOR_PINK, false);
+
+        drawFlower(dc, cx + (10 * scale).toNumber(), cy + (119 * scale).toNumber(), scale * 0.85, COLOR_PINK, COLOR_BEIGE);
+        drawFlower(dc, cx - (12 * scale).toNumber(), cy + (123 * scale).toNumber(), scale * 0.65, COLOR_ROSE, COLOR_BEIGE);
+
+        drawStar(dc, cx - (46 * scale).toNumber(), cy - (121 * scale).toNumber(), scale, COLOR_GOLD);
+        drawStar(dc, cx - (132 * scale).toNumber(), cy + (10 * scale).toNumber(), scale, COLOR_BRONZE);
+        drawStar(dc, cx + (132 * scale).toNumber(), cy + (58 * scale).toNumber(), scale, COLOR_GOLD);
+        drawStar(dc, cx - (127 * scale).toNumber(), cy + (78 * scale).toNumber(), scale, COLOR_BRONZE);
+    }
+
+    private function drawPumpkin(dc, x, y, scale) {
+        var r = (12 * scale).toNumber();
+        var dx = (9 * scale).toNumber();
+
+        if (r < 7) {
+            r = 7;
+        }
+
+        dc.setColor(COLOR_BRONZE, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(x - dx, y, r);
+        dc.fillCircle(x, y, r + 2);
+        dc.fillCircle(x + dx, y, r);
+
+        dc.setColor(COLOR_GOLD, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(1);
+        dc.drawLine(x - dx, y - r + 2, x - dx, y + r - 2);
+        dc.drawLine(x + dx, y - r + 2, x + dx, y + r - 2);
+
+        dc.setColor(COLOR_BROWN, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(2);
+        dc.drawLine(x, y - r - 1, x + (3 * scale).toNumber(), y - r - (10 * scale).toNumber());
+    }
+
+    private function drawFlower(dc, x, y, scale, petalColor, centerColor) {
+        var p = (6 * scale).toNumber();
+        if (p < 3) {
+            p = 3;
+        }
+
+        dc.setColor(petalColor, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(x - p, y, p);
+        dc.fillCircle(x + p, y, p);
+        dc.fillCircle(x, y - p, p);
+        dc.fillCircle(x, y + p, p);
+
+        dc.setColor(centerColor, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(x, y, (p / 2).toNumber());
+    }
+
+    private function drawBud(dc, x, y, scale, color) {
+        var r = (6 * scale).toNumber();
+        if (r < 3) {
+            r = 3;
+        }
+
+        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(x, y, r);
+        dc.fillCircle(x - r + 1, y + (4 * scale).toNumber(), r - 1);
+        dc.fillCircle(x + r - 1, y + (4 * scale).toNumber(), r - 1);
+    }
+
+    private function drawLeaf(dc, x, y, scale, color, vertical) {
+        var r = (7 * scale).toNumber();
+        if (r < 4) {
+            r = 4;
+        }
+
+        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+
+        if (vertical) {
+            dc.fillCircle(x, y - r, r);
+            dc.fillCircle(x, y + r, r);
+        } else {
+            dc.fillCircle(x - r, y, r);
+            dc.fillCircle(x + r, y, r);
+        }
+    }
+
+    private function drawStem(dc, x, y, scale, color) {
+        var len = (38 * scale).toNumber();
+        var leaf = (7 * scale).toNumber();
+
+        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(2);
+        dc.drawLine(x, y, x, y + len);
+        dc.drawLine(x, y + (10 * scale).toNumber(), x - leaf, y + (4 * scale).toNumber());
+        dc.drawLine(x, y + (21 * scale).toNumber(), x + leaf, y + (14 * scale).toNumber());
+        dc.drawLine(x, y + (31 * scale).toNumber(), x - leaf, y + (24 * scale).toNumber());
+    }
+
+    private function drawStar(dc, x, y, scale, color) {
+        var arm = (4 * scale).toNumber();
+        if (arm < 3) {
+            arm = 3;
+        }
+
+        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(1);
+        dc.drawLine(x - arm, y, x + arm, y);
+        dc.drawLine(x, y - arm, x, y + arm);
+    }
+
+    private function formatSteps(steps) {
+        if (steps >= 1000) {
+            var whole = steps / 1000;
+            var decimal = (steps % 1000) / 100;
+            return whole.format("%d") + "." + decimal.format("%d") + "k";
+        }
+
+        return steps.format("%d");
     }
 }
