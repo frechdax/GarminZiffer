@@ -90,16 +90,16 @@ class GarminZifferView extends WatchUi.WatchFace {
             Graphics.FONT_XTINY, valueOrDash(heartRate), Graphics.TEXT_JUSTIFY_CENTER);
 
         // The same small phrase visible in the reference face.
-        dc.drawText((286 * scale).toNumber(), (177 * scale).toNumber(),
+        dc.drawText((286 * scale).toNumber(), (171 * scale).toNumber(),
             Graphics.FONT_XTINY, "IN DEN", Graphics.TEXT_JUSTIFY_CENTER);
 
         // Large two-color time.
         dc.setColor(COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText((145 * scale).toNumber(), (188 * scale).toNumber(),
+        dc.drawText((145 * scale).toNumber(), (178 * scale).toNumber(),
             Graphics.FONT_NUMBER_HOT, hourText, Graphics.TEXT_JUSTIFY_CENTER);
 
         dc.setColor(COLOR_ORANGE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText((309 * scale).toNumber(), (188 * scale).toNumber(),
+        dc.drawText((309 * scale).toNumber(), (202 * scale).toNumber(),
             Graphics.FONT_NUMBER_HOT, minuteText, Graphics.TEXT_JUSTIFY_CENTER);
 
         // Steps row.
