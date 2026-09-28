@@ -1,0 +1,32 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "monkeyc",
+      "request": "launch",
+      "name": "Run Venu 4 45 mm",
+      "prg": "${workspaceFolder}${pathSeparator}bin${pathSeparator}${workspaceFolderBasename}.prg",
+      "prgDebugXml": "${workspaceFolder}${pathSeparator}bin${pathSeparator}${workspaceFolderBasename}.prg.debug.xml",
+      "stopAtLaunch": false,
+      "device": "venu445mm"
+    },
+    {
+      "type": "monkeyc",
+      "request": "launch",
+      "name": "Run Venu 4 41 mm",
+      "prg": "${workspaceFolder}${pathSeparator}bin${pathSeparator}${workspaceFolderBasename}.prg",
+      "prgDebugXml": "${workspaceFolder}${pathSeparator}bin${pathSeparator}${workspaceFolderBasename}.prg.debug.xml",
+      "stopAtLaunch": false,
+      "device": "venu441mm"
+    },
+    {
+      "type": "monkeyc",
+      "request": "launch",
+      "name": "Choose Garmin Device",
+      "prg": "${workspaceFolder}${pathSeparator}bin${pathSeparator}${workspaceFolderBasename}.prg",
+      "prgDebugXml": "${workspaceFolder}${pathSeparator}bin${pathSeparator}${workspaceFolderBasename}.prg.debug.xml",
+      "stopAtLaunch": false,
+      "device": "${command:GetTargetDevice}"
+    }
+  ]
+}
