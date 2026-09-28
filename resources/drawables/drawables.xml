@@ -1,7 +1,7 @@
 <drawables>
     <bitmap id="LauncherIcon" filename="launcher_icon.png" />
     <bitmap id="AutumnReference"
-            filename="autumn_premium_454.png"
+            filename="autumn_premium_454.jpg"
             dithering="none"
             compress="true"
             scaleX="100%"
